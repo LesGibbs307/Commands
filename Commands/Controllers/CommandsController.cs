@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Commands.DTOs;
 using Commands.Models;
 using Commands.Repositories;
 using Commands.Repositories.Interfaces;
@@ -15,23 +17,30 @@ namespace Commands.Controllers
     [Route("api/[controller]")]
     public class CommandsController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly ICommandRepo _commandRepo;
-        public CommandsController(ICommandRepo repository)
+        public CommandsController(ICommandRepo repository, IMapper mapper)
         {
+            _mapper = mapper;
             _commandRepo = repository;
         }
 
         [HttpGet]
-        public ActionResult <IEnumerable<Command>> GetAllCommands()
+        public ActionResult <IEnumerable<CommandReadDTO>> GetAllCommands()
         { 
             var items = _commandRepo.GetAllCommands();
-            return Ok(items);
+            return Ok(_mapper.Map<IEnumerable<CommandReadDTO>>(items));
         }
 
         [HttpGet("{id}")]
-        public ActionResult GetAllCommandById(int id)
+        public ActionResult<CommandReadDTO> GetAllCommandById(int id)
         {
-            return Ok(_commandRepo.GetCommandById(id));
+            var commandItem = _commandRepo.GetCommandById(id);
+            if (commandItem == null)
+            {
+                return NotFound();
+            }
+            return Ok(_mapper.Map<CommandReadDTO>(commandItem));
         }
     }
 }

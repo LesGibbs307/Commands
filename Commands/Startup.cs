@@ -1,3 +1,5 @@
+using System;
+using AutoMapper;
 using Commands.Repositories;
 using Commands.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -6,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 
 namespace Commands
 {
@@ -24,6 +27,8 @@ namespace Commands
             services.AddDbContext<CommandDBContext>(opt => opt.UseSqlServer
             (Configuration.GetConnectionString("CommandConnection")));
             services.AddControllers();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<ICommandRepo, CommandRepo>();
 
         }

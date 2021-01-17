@@ -9,35 +9,21 @@ namespace Commands.Repositories
 {
     public class CommandRepo : ICommandRepo
     {
+        private readonly CommandDBContext _context;
+
         public CommandRepo(CommandDBContext context)
         {
-
+            _context = context;
         }
 
         public IEnumerable<Command> GetAllCommands()
         {
-            throw new NotImplementedException();
+            return _context.Commands.ToList();
         }
 
         public Command GetCommandById(int id)
         {
-            throw new NotImplementedException();
+            return _context.Commands.FirstOrDefault(p => p.Id == id);
         }
-
-        //public IEnumerable<Command> GetAllCommands()
-        //{
-        //    var commands = new List<Command>
-        //    {
-        //        new Command { Id = 0, HowTo = "Test", Line = "Study", Platform = "School" },
-        //        new Command { Id = 1, HowTo = "Quiz", Line = "Study", Platform = "School" },
-        //        new Command { Id = 2, HowTo = "Final Exam", Line = "Study", Platform = "School" }
-        //    };
-        //    return commands;
-        //}
-
-        //public Command GetCommandById(int id)
-        //{
-        //    return new Command { Id = 0, HowTo = "Test", Line = "Study", Platform = "School" };
-        //}
     }
 }
